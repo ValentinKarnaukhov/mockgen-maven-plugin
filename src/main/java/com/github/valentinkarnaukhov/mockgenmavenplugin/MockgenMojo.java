@@ -1,4 +1,4 @@
-package com.github.valentinkarnaukhov;
+package com.github.valentinkarnaukhov.mockgenmavenplugin;
 
 import com.github.valentinkarnaukhov.stubgenerator.WiremockGenerator;
 import io.swagger.codegen.v3.ClientOptInput;
@@ -11,10 +11,12 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
-@Mojo(name = "generate-stubs", defaultPhase = LifecyclePhase.COMPILE)
+import java.util.Objects;
+
+@Mojo(name = "generate-stubs", defaultPhase = LifecyclePhase.INSTALL)
 public class MockgenMojo extends AbstractMojo {
 
-    @Parameter(property = "modelPackage")
+    @Parameter(property = "modelPackage", defaultValue = "com.github.valentinkarnaukhov.mockgen.model")
     String modelPackage;
 
     @Parameter(property = "lang", defaultValue = "java", readonly = true)
@@ -29,9 +31,6 @@ public class MockgenMojo extends AbstractMojo {
     @Parameter(property = "generateModels", defaultValue = "true")
     Boolean generateModels;
 
-    @Parameter(property = "generateStub", defaultValue = "true", readonly = true)
-    Boolean generateStub;
-
     @Parameter(property = "stubPackage")
     String stubPackage;
 
@@ -39,7 +38,7 @@ public class MockgenMojo extends AbstractMojo {
     String delegateObject;
 
     @Parameter(property = "configOptions")
-    ConfigOptions configOptions;
+    ConfigOptions configOptions = new ConfigOptions();
 
     public void execute() {
         CodegenConfigurator codegenConfigurator = new CodegenConfigurator();
@@ -48,7 +47,6 @@ public class MockgenMojo extends AbstractMojo {
         codegenConfigurator.setLang(lang);
         codegenConfigurator.setInputSpec(inputSpec);
         codegenConfigurator.setOutputDir(outputDir);
-        codegenConfigurator.setTemplateDir("src/main/resources");
 
         ClientOptInput input = codegenConfigurator.toClientOptInput();
 
@@ -58,11 +56,11 @@ public class MockgenMojo extends AbstractMojo {
         input.setOpenAPI(openAPI);
 
         WiremockGenerator wiremockGenerator = new WiremockGenerator();
-        wiremockGenerator.setGeneratorPropertyDefault("explode", configOptions.explode.toString());
-        wiremockGenerator.setGeneratorPropertyDefault("useTags", configOptions.useTags.toString());
+        wiremockGenerator.setGeneratorPropertyDefault("explode", nullOrToString(configOptions.explode));
+        wiremockGenerator.setGeneratorPropertyDefault("useTags", nullOrToString(configOptions.useTags));
         wiremockGenerator.setGeneratorPropertyDefault("maxDepth", configOptions.maxDepth);
-        wiremockGenerator.setGeneratorPropertyDefault("generateModels", generateModels.toString());
-        wiremockGenerator.setGeneratorPropertyDefault("generateStub", generateStub.toString());
+        wiremockGenerator.setGeneratorPropertyDefault("generateModels", nullOrToString(generateModels));
+        wiremockGenerator.setGeneratorPropertyDefault("generateStub", "true");
         wiremockGenerator.setGeneratorPropertyDefault("stubPackage", stubPackage);
         wiremockGenerator.setGeneratorPropertyDefault("delegateObject", delegateObject);
         wiremockGenerator.setPrefixMap(configOptions.prefixMap);
@@ -70,5 +68,9 @@ public class MockgenMojo extends AbstractMojo {
         wiremockGenerator.opts(input);
 
         wiremockGenerator.generate();
+    }
+
+    private String nullOrToString(Object object) {
+        return Objects.nonNull(object) ? object.toString() : null;
     }
 }

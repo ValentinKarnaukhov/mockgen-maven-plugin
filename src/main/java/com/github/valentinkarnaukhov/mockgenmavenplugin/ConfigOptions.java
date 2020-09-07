@@ -1,4 +1,4 @@
-package com.github.valentinkarnaukhov;
+package com.github.valentinkarnaukhov.mockgenmavenplugin;
 
 import org.apache.maven.plugins.annotations.Parameter;
 
