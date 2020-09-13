@@ -16,7 +16,7 @@ public class ConfigOptions {
     Map<String, String> prefixMap;
 
     @Parameter(property = "maxDepth")
-    String maxDepth;
+    Integer maxDepth;
 
 
 }

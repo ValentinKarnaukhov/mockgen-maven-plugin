@@ -1,17 +1,12 @@
 package com.github.valentinkarnaukhov.mockgenmavenplugin;
 
-import com.github.valentinkarnaukhov.stubgenerator.WiremockGenerator;
-import io.swagger.codegen.v3.ClientOptInput;
-import io.swagger.codegen.v3.config.CodegenConfigurator;
-import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.parser.OpenAPIV3Parser;
-import io.swagger.v3.parser.util.InlineModelResolver;
+import com.github.valentinkarnaukhov.stubgenerator.GeneratorExecutor;
+import com.github.valentinkarnaukhov.stubgenerator.model.CodegenConfiguration;
+import com.github.valentinkarnaukhov.stubgenerator.model.GeneratorProperties;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-
-import java.util.Objects;
 
 @Mojo(name = "generate-stubs", defaultPhase = LifecyclePhase.INSTALL)
 public class MockgenMojo extends AbstractMojo {
@@ -41,36 +36,25 @@ public class MockgenMojo extends AbstractMojo {
     ConfigOptions configOptions = new ConfigOptions();
 
     public void execute() {
-        CodegenConfigurator codegenConfigurator = new CodegenConfigurator();
+        GeneratorExecutor executor = new GeneratorExecutor();
+        CodegenConfiguration configuration = new CodegenConfiguration();
+        GeneratorProperties properties = configuration.getGeneratorProperties();
 
-        codegenConfigurator.setModelPackage(modelPackage);
-        codegenConfigurator.setLang(lang);
-        codegenConfigurator.setInputSpec(inputSpec);
-        codegenConfigurator.setOutputDir(outputDir);
+        configuration.setModelPackage(modelPackage);
+        configuration.setLang(lang);
+        configuration.setInputSpec(inputSpec);
+        configuration.setOutputDir(outputDir);
+        configuration.setGenerateModels(generateModels);
+        configuration.setStubPackage(stubPackage);
+        configuration.setDelegateObject(delegateObject);
 
-        ClientOptInput input = codegenConfigurator.toClientOptInput();
+        properties.setPrefixMap(configOptions.prefixMap);
+        properties.setExplode(configOptions.explode);
+        properties.setUseTags(configOptions.useTags);
+        properties.setMaxDepth(configOptions.maxDepth);
 
-        OpenAPI openAPI = new OpenAPIV3Parser().read(codegenConfigurator.getInputSpec());
-        InlineModelResolver resolver = new InlineModelResolver(true, true);
-        resolver.flatten(openAPI);
-        input.setOpenAPI(openAPI);
-
-        WiremockGenerator wiremockGenerator = new WiremockGenerator();
-        wiremockGenerator.setGeneratorPropertyDefault("explode", nullOrToString(configOptions.explode));
-        wiremockGenerator.setGeneratorPropertyDefault("useTags", nullOrToString(configOptions.useTags));
-        wiremockGenerator.setGeneratorPropertyDefault("maxDepth", configOptions.maxDepth);
-        wiremockGenerator.setGeneratorPropertyDefault("generateModels", nullOrToString(generateModels));
-        wiremockGenerator.setGeneratorPropertyDefault("generateStub", "true");
-        wiremockGenerator.setGeneratorPropertyDefault("stubPackage", stubPackage);
-        wiremockGenerator.setGeneratorPropertyDefault("delegateObject", delegateObject);
-        wiremockGenerator.setPrefixMap(configOptions.prefixMap);
-
-        wiremockGenerator.opts(input);
-
-        wiremockGenerator.generate();
+        executor.generate(configuration);
     }
 
-    private String nullOrToString(Object object) {
-        return Objects.nonNull(object) ? object.toString() : null;
-    }
+
 }
