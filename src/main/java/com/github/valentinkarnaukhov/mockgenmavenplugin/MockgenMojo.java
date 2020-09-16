@@ -14,6 +14,12 @@ public class MockgenMojo extends AbstractMojo {
     @Parameter(property = "modelPackage", defaultValue = "com.github.valentinkarnaukhov.mockgen.model")
     String modelPackage;
 
+    @Parameter(property = "stubPackage", defaultValue = "com.github.valentinkarnaukhov.mockgen.stub")
+    String stubPackage;
+
+    @Parameter(property = "supportPackage", defaultValue = "com.github.valentinkarnaukhov.mockgen.support")
+    String supportPackage;
+
     @Parameter(property = "lang", defaultValue = "java", readonly = true)
     String lang;
 
@@ -25,9 +31,6 @@ public class MockgenMojo extends AbstractMojo {
 
     @Parameter(property = "generateModels", defaultValue = "true")
     Boolean generateModels;
-
-    @Parameter(property = "stubPackage")
-    String stubPackage;
 
     @Parameter(property = "delegateObject")
     String delegateObject;
@@ -41,11 +44,12 @@ public class MockgenMojo extends AbstractMojo {
         GeneratorProperties properties = configuration.getGeneratorProperties();
 
         configuration.setModelPackage(modelPackage);
+        configuration.setStubPackage(stubPackage);
+        configuration.setSupportPackage(supportPackage);
         configuration.setLang(lang);
         configuration.setInputSpec(inputSpec);
         configuration.setOutputDir(outputDir);
         configuration.setGenerateModels(generateModels);
-        configuration.setStubPackage(stubPackage);
         configuration.setDelegateObject(delegateObject);
 
         properties.setPrefixMap(configOptions.prefixMap);
