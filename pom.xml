@@ -1,6 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
 
     <groupId>com.github.valentinkarnaukhov</groupId>
     <artifactId>mockgen-maven-plugin</artifactId>
@@ -28,13 +33,6 @@
         </license>
     </licenses>
 
-    <scm>
-        <connection>scm:git:https://github.com/ValentinKarnaukhov/mockgen-maven-plugin.git</connection>
-        <developerConnection>scm:git:ssh://github.com/ValentinKarnaukhov/mockgen-maven-plugin.git</developerConnection>
-        <url>https://github.com/ValentinKarnaukhov/mockgen-maven-plugin</url>
-        <tag>HEAD</tag>
-    </scm>
-
     <distributionManagement>
         <snapshotRepository>
             <id>ossrh</id>
@@ -45,6 +43,17 @@
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
+
+    <scm>
+        <connection>scm:git:https://github.com/ValentinKarnaukhov/mockgen-maven-plugin.git</connection>
+        <developerConnection>scm:git:ssh://github.com/ValentinKarnaukhov/mockgen-maven-plugin.git</developerConnection>
+        <url>https://github.com/ValentinKarnaukhov/mockgen-maven-plugin</url>
+        <tag>HEAD</tag>
+    </scm>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
     <build>
         <pluginManagement>
