@@ -3,6 +3,7 @@
 This project is open to changes. 
 If you have good idea how to improve this project start contributing right now!
 Also you can solve issue. From issue list: https://github.com/ValentinKarnaukhov/mockgen-maven-plugin/issues 
+Main code there https://github.com/ValentinKarnaukhov/stub-generator
 
 1) Fork the project
 2) Create new branch
