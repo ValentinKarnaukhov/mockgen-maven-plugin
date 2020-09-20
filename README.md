@@ -32,18 +32,30 @@ Add plugin to your pom.xml file.
 Run build
 `mvn clean install`
 
-<H3>Configuration parameter</H3>
+###Configuration parameters 
+
 - `inputSpec` - Swagger spec file path
+
 - `modelPackage` - package of existing models or output package
+
 - `generateModels` - flag to generate models or use existing
+
 - `stubPackage` - out package for stubs
+
 - `supportPackage` - package for support files
+
 - `outputDir` - target output path
+
 - `delegateObject` - object to wrap default logic of mocks creation
+
 - `configOptions.explode` - explode mode on/off
+
 - `configOptions.useTags` - if this parameter is true then Tags will be used for class names
+
 - `configOptions.maxDepth` - max depth for explosion
+
 - `configOptions.prefixMap` - map for query/body/response prefixes
+
 
 See example of full configuration there: https://github.com/ValentinKarnaukhov/mockgen-example/blob/master/pom.xml
 
